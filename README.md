@@ -18,6 +18,10 @@
 
 `$ ionic serve`
 
+To view a multi-screen (differing OS) homogeneous display, use
+
+`$ ionic serve --lab`
+
 Once its up, you can leave the terminal up for auto-updates whenever you save your work.
 
 4)a (Optional) Test on mobile emulator.
