@@ -17,6 +17,10 @@
     "rxjs": "5.0.0-beta.6",
     "zone.js": "^0.6.12"
   },
+  "name": "is439activitymonitor",
+  "description": "A real time IoT solution for monitoring individual location movement in real life scenarios",
+  "repository": "bitbucket.org/limshiq/is439activitymonitor",
+  "license": "MIT",
   "devDependencies": {
     "del": "2.2.0",
     "gulp": "3.9.1",
