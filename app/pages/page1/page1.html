@@ -12,7 +12,6 @@
   <p>
     This page will chart information related to movement in/out, time spent within a certain activity area, etc.
   </p>
-  <!--<nvd3 options="options" data="data"></nvd3>-->
     <style>
 
         #chart svg {
@@ -20,9 +19,9 @@
         }
 
     </style>
-    <ion-content id="chart">
+    <nvd3 id="chart">
         <svg></svg>
-    </ion-content>
+    </nvd3>
     <div>{{testline}}</div>
     <ion-list>
         <ion-item *ngFor="let item of items">
