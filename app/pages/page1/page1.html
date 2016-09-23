@@ -7,17 +7,26 @@
     <!--<script src="../../../bower_components/d3/d3.js"></script>-->
     <!--<script src="../../../bower_components/nvd3/build/nv.d3.min.js"></script>-->
     <!--<script src="../../../bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>-->
-    <!--<link rel=”stylesheet” href="../../../bower_components/nvd3/build/nv.d3.css">-->
+    <link rel=”stylesheet” href="../../../node_modules/nvd3/build/nv.d3.css">
   <h2>Stats page placeholder</h2>
   <p>
     This page will chart information related to movement in/out, time spent within a certain activity area, etc.
   </p>
-  <!--<nvd3 options="vm.options" data="vm.data"></nvd3>-->
-    <!--<div>{{testline}}</div>-->
-    <!--<ion-list>-->
-        <!--<ion-item *ngFor="let item of items">-->
-            <!--{{ item }}-->
-        <!--</ion-item>-->
-    <!--</ion-list>-->
-    <!--{{items}}-->
+  <!--<nvd3 options="options" data="data"></nvd3>-->
+    <style>
+
+        #chart svg {
+            height: 400px;
+        }
+
+    </style>
+    <div id="chart">
+        <svg></svg>
+    </div>
+    <div>{{testline}}</div>
+    <ion-list>
+        <ion-item *ngFor="let item of items">
+            {{ item }}
+        </ion-item>
+    </ion-list>
 </ion-content>
