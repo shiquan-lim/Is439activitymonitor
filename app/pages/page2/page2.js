@@ -19,7 +19,6 @@ export class Page2 {
 
           //Configure how the tooltip looks.
           chart.tooltip.contentGenerator(function (obj) {
-              console.log(obj);
              return obj.point.name + "\n" + obj.point.distance + " cm away"
           });
 
