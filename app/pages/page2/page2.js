@@ -11,16 +11,17 @@ export class Page2 {
   constructor() {
       nv.addGraph(function() {
           var chart = nv.models.scatterChart()
-          // .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.
-          // .showDistY(true)
+              // .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.
+              // .showDistY(true)
           // .transitionDuration(350)
               .clipEdge(true)
               .color(d3.scale.category10().range());
 
           //Configure how the tooltip looks.
-          // chart.tooltipContent(function(key) {
-          //     return '<h3>' + key + '</h3>';
-          // });
+          chart.tooltip.contentGenerator(function (obj) {
+              console.log(obj);
+             return obj.point.name + "\n" + obj.point.distance + " cm away"
+          });
 
           //Axis settings
           chart.xAxis.tickFormat(d3.format('.02f'));
@@ -30,7 +31,7 @@ export class Page2 {
           //We want to show shapes other than circles.
           // chart.scatter.onlyCircles(false);
 
-          var myData = randomData(4,40);
+          var myData = randomData(4,10);
           d3.select('#chart2 svg')
               .datum(myData)
               .call(chart);
@@ -56,11 +57,15 @@ export class Page2 {
               });
 
               for (var j = 0; j < points; j++) {
+                  let xVal = random();
+                  let yVal = random();
                   data[i].values.push({
-                      x: random()
-                      , y: random()
-                      , size: Math.random()   //Configure the size of each scatter point
-                      , shape: (Math.random() > 0.95) ? shapes[j % 6] : "circle"  //Configure the shape of each scatter point.
+                      x: xVal
+                      , y: yVal
+                      , size: (Math.abs(xVal)) * (Math.abs(yVal))//Configure the size of each scatter point
+                      , shape: "circle"  //Configure the shape of each scatter point.
+                      , name: "Shi Quan"
+                      , distance: 30
                   });
               }
           }
