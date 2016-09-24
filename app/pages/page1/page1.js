@@ -1,9 +1,8 @@
 import {Page} from 'ionic-angular';
 // import {Component} from '@angular/core';
-// import * as d3 from 'd3/d3';
+
 import * as d3 from '../../../node_modules/d3/d3';
 import * as nv from '../../../node_modules/nvd3/build/nv.d3';
-import '../../../node_modules/nvd3/build/nv.d3.css!';
 
 
 @Page({
@@ -11,8 +10,6 @@ import '../../../node_modules/nvd3/build/nv.d3.css!';
 })
 
 export class Page1 {
-  // options;
-  // testline;
   constructor() {
       this.items = [
           'Amsterdam',
@@ -20,56 +17,6 @@ export class Page1 {
           'Singapore'
       ];
       this.testline = "Hello controller!";
-      this.options = {
-          chart: {
-              type: "pieChart",
-              height: 500,
-              x: function(d){return d.key;},
-              y: function(d){return d.y;},
-              showLabels: true,
-              duration: 500,
-              labelThreshold: 0.01,
-              labelSunbeamLayout: true,
-              legend: {
-                  margin: {
-                      top: 5,
-                          right: 35,
-                          bottom: 5,
-                          left: 0
-                  }
-              }
-          }
-      };
-      this.data = [
-          {
-              key: 'One',
-              y: 5
-          },
-          {
-              key: 'Two',
-              y: 2
-          },
-          {
-              key: 'Three',
-              y: 9
-          },
-          {
-              key: 'Four',
-              y: 7
-          },
-          {
-              key: 'Five',
-              y: 4
-          },
-          {
-              key: 'Six',
-              y: 3
-          },
-          {
-              key: 'Seven',
-              y: .5
-          }
-      ];
 
       // /*Data sample:
        let sample = [

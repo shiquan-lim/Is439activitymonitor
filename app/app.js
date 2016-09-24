@@ -1,7 +1,7 @@
 import {App, Platform} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {TabsPage} from './pages/tabs/tabs';
-import {Cordova} from '../../../node_modules/cordova-js/src/cordova';
+// import {Cordova} from '../../../node_modules/cordova-js/src/cordova';
 
 // import { FIREBASE_PROVIDERS,
 //     defaultFirebase,
