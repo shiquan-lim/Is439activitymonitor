@@ -16,8 +16,8 @@ export class Page2 {
               // .showDistY(true)
           // .transitionDuration(350)
           //     .clipEdge(true)
-              .showYAxis(false)
-              .showXAxis(false)
+          //     .showYAxis(false)
+          //     .showXAxis(false)
               .color(d3.scale.category10().range());
 
           //Configure how the tooltip looks.
@@ -26,8 +26,8 @@ export class Page2 {
           });
 
           //Axis settings
-          // chart.xAxis.tickFormat(d3.format('.02f'));
-          // chart.yAxis.tickFormat(d3.format('.02f'));
+          chart.xAxis.tickFormat(d3.format('.02f'));
+          chart.yAxis.tickFormat(d3.format('.02f'));
           // chart.yAxis.tickValues(0);
           // chart.xAxis.tickValues(0);
           chart.margin({"left": 40});
@@ -36,7 +36,7 @@ export class Page2 {
           //We want to show shapes other than circles.
           // chart.scatter.onlyCircles(false);
 
-          var myData = randomData(4,10);
+          var myData = randomData(2,10);
 
           nv.addGraph(loadChart);
 
@@ -54,12 +54,17 @@ export class Page2 {
 
           function refreshData()
           {
-              let x = 1;  // 5 Seconds
+              let x = 0.5;  // 5 Seconds
 
               for(let gp = 0; gp < myData.length-1; gp++) {
                   for(let dp = 0; dp < myData[gp].values.length; dp++ ) {
-                      myData[gp].values[dp].x = myData[gp].values[dp].x + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
-                      myData[gp].values[dp].y = myData[gp].values[dp].y + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
+                      let newX = myData[gp].values[dp].x + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
+                      let newY = myData[gp].values[dp].y + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
+                      let newWeight = Number(Math.sqrt(Math.pow(Math.abs(newX),2) + Math.pow(Math.abs(newY),2))).toFixed(2)
+                      myData[gp].values[dp].x = newX;
+                      myData[gp].values[dp].y = newY;
+                      myData[gp].values[dp].distance = newWeight;
+                      myData[gp].values[dp].size = newWeight;
                   }
               }
               loadChart();
@@ -74,7 +79,7 @@ export class Page2 {
       /**************************************
        * Simple test data generator
        */
-      var users = [["Shi Quan", "Max Chua", "Eslynn Choo", "ShiQi", "Song Rui", "Gideon", "Adam Tan", "Robert Choo", "Alvin Lee", "Sergey Kovalev"],["Augustine Tan", "Hwee Pink", "Chester Lim", "Amos Tan", "Joseph Lee", "Vinod Aneh", "Cheng Fu", "Zhou Wei", "Margret Thatcher", "Ahmed Azziz"],["Osama Bin Laden", "George Bush", "Barack Obama", "Hillary Clinton", "Donald Trump", "Joe Biden", "Shinzo Abe", "Lee Hsien Loong", "Xi Jin Ping", "Theresa May"],["West Brooke", "Mia Khalifa", "Tori Black", "Yan Ru", "Hitler", "Winston Churchill", "Karl Marx", "Mao ZeDong", "Stalin", "Lenin"]];
+      var users = ["Shi Quan", "Max Chua", "Eslynn Choo", "ShiQi", "Song Rui", "Gideon", "Adam Tan", "Robert Choo", "Alvin Lee", "Sergey Kovalev","Augustine Tan", "Hwee Pink", "Chester Lim", "Amos Tan", "Joseph Lee", "Vinod Aneh", "Cheng Fu", "Zhou Wei", "Margret Thatcher", "Ahmed Azziz","Osama Bin Laden", "George Bush", "Barack Obama", "Hillary Clinton", "Donald Trump", "Joe Biden", "Shinzo Abe", "Lee Hsien Loong", "Xi Jin Ping", "Theresa May","West Brooke", "Mia Khalifa", "Tori Black", "Yan Ru", "Hitler", "Winston Churchill", "Karl Marx", "Mao ZeDong", "Stalin", "Lenin"];
       function randomData(groups, points) { //# groups,# points per group
           var data = [],
               // shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
@@ -83,20 +88,20 @@ export class Page2 {
 
           for (var i = 0; i < groups; i++) {
               data.push({
-                  key: 'Group ' + i,
+                  key: 'Student Group ' + i,
                   values: []
               });
 
               for (var j = 0; j < points; j++) {
-                  let xVal = random();
-                  let yVal = random();
+                  let xVal = random()*3;
+                  let yVal = random()*3;
                   data[i].values.push({
                       x: xVal
                       , y: yVal
                       , size: Number(Math.sqrt(Math.pow(Math.abs(xVal),2) + Math.pow(Math.abs(yVal),2))).toFixed(2)//Configure the size of each scatter point
                       , shape: "circle"  //Configure the shape of each scatter point.
-                      , name: users[i][j]
-                      , distance: Number(Math.sqrt(Math.pow(Math.abs(xVal),2) + Math.pow(Math.abs(yVal),2))* 3).toFixed(2)
+                      , name: users[i * points + j]
+                      , distance: Number(Math.sqrt(Math.pow(Math.abs(xVal),2) + Math.pow(Math.abs(yVal),2))).toFixed(2)
                   });
               }
           }
@@ -106,7 +111,7 @@ export class Page2 {
               values: [{
                   x: 0
                   , y: 0
-                  , size: 1//Configure the size of each scatter point
+                  , size: 3//Configure the size of each scatter point
                   , shape: "circle"  //Configure the shape of each scatter point.
                   , name: "NUCLEUS"
                   , distance:0
