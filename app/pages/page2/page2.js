@@ -1,9 +1,10 @@
-import {Page} from 'ionic-angular';
+// import {Component} from 'ionic-angular';
+import {Component} from '@angular/core';
 import * as d3 from '../../../node_modules/d3/d3';
 import * as nv from '../../../node_modules/nvd3/build/nv.d3';
 
 
-@Page({
+@Component({
   templateUrl: 'build/pages/page2/page2.html'
 })
 
@@ -14,26 +15,36 @@ export class Page2 {
               // .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.
               // .showDistY(true)
           // .transitionDuration(350)
-              .clipEdge(true)
+          //     .clipEdge(true)
+              .showYAxis(false)
+              .showXAxis(false)
               .color(d3.scale.category10().range());
 
           //Configure how the tooltip looks.
           chart.tooltip.contentGenerator(function (obj) {
-             return obj.point.name + "\n" + obj.point.distance + " cm away"
+             return obj.point.name + "\n" + obj.point.distance + " m away"
           });
 
           //Axis settings
-          chart.xAxis.tickFormat(d3.format('.02f'));
-          chart.yAxis.tickFormat(d3.format('.02f'));
+          // chart.xAxis.tickFormat(d3.format('.02f'));
+          // chart.yAxis.tickFormat(d3.format('.02f'));
+          // chart.yAxis.tickValues(0);
+          // chart.xAxis.tickValues(0);
           chart.margin({"left": 40});
+          chart.interactiveUpdateDelay(300);
 
           //We want to show shapes other than circles.
           // chart.scatter.onlyCircles(false);
 
-          var myData = randomData(4,10);
+          // var myData = randomData(4,10);
           d3.select('#chart2 svg')
-              .datum(myData)
-              .call(chart);
+              .datum(randomData(4,10))
+              .call(chart)
+              .append("line")
+              .attr("x1", 0)
+              .attr("y1", 0)
+              .attr("x2", 0)
+              .attr("y2", 0);
 
           nv.utils.windowResize(chart.update);
 
@@ -43,6 +54,7 @@ export class Page2 {
       /**************************************
        * Simple test data generator
        */
+      var users = [["Shi Quan", "Max Chua", "Eslynn Choo", "ShiQi", "Song Rui", "Gideon", "Adam Tan", "Robert Choo", "Alvin Lee", "Sergey Kovalev"],["Augustine Tan", "Hwee Pink", "Chester Lim", "Amos Tan", "Joseph Lee", "Vinod Aneh", "Cheng Fu", "Zhou Wei", "Margret Thatcher", "Ahmed Azziz"],["Osama Bin Laden", "George Bush", "Barack Obama", "Hillary Clinton", "Donald Trump", "Joe Biden", "Shinzo Abe", "Lee Hsien Loong", "Xi Jin Ping", "Theresa May"],["West Brooke", "Mia Khalifa", "Tori Black", "Yan Ru", "Hitler", "Winston Churchill", "Karl Marx", "Mao ZeDong", "Stalin", "Lenin"]];
       function randomData(groups, points) { //# groups,# points per group
           var data = [],
               // shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
@@ -61,13 +73,25 @@ export class Page2 {
                   data[i].values.push({
                       x: xVal
                       , y: yVal
-                      , size: (Math.abs(xVal)) * (Math.abs(yVal))//Configure the size of each scatter point
+                      , size: Number(Math.sqrt(Math.pow(Math.abs(xVal),2) + Math.pow(Math.abs(yVal),2))).toFixed(2)//Configure the size of each scatter point
                       , shape: "circle"  //Configure the shape of each scatter point.
-                      , name: "Shi Quan"
-                      , distance: 30
+                      , name: users[i][j]
+                      , distance: Number(Math.sqrt(Math.pow(Math.abs(xVal),2) + Math.pow(Math.abs(yVal),2))* 3).toFixed(2)
                   });
               }
           }
+
+          data.push({
+              key: 'Instructor',
+              values: [{
+                  x: 0
+                  , y: 0
+                  , size: 1//Configure the size of each scatter point
+                  , shape: "circle"  //Configure the shape of each scatter point.
+                  , name: "NUCLEUS"
+                  , distance:0
+              }]
+          });
 
           return data;
       }

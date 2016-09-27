@@ -1,11 +1,11 @@
-import {Page} from 'ionic-angular';
-// import {Component} from '@angular/core';
+// import {Component} from 'ionic-angular';
+import {Component} from '@angular/core';
 
 import * as d3 from '../../../node_modules/d3/d3';
 import * as nv from '../../../node_modules/nvd3/build/nv.d3';
 
 
-@Page({
+@Component({
   templateUrl: 'build/pages/page1/page1.html'
 })
 
