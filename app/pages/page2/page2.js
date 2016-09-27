@@ -26,11 +26,11 @@ export class Page2 {
           });
 
           //Axis settings
-          chart.xAxis.tickFormat(d3.format('.02f'));
-          chart.yAxis.tickFormat(d3.format('.02f'));
+          chart.xAxis.tickFormat(d3.format('.01f'));
+          chart.yAxis.tickFormat(d3.format('.01f'));
           // chart.yAxis.tickValues(0);
           // chart.xAxis.tickValues(0);
-          chart.margin({"left": 40});
+          chart.margin({"left": 30});
           chart.interactiveUpdateDelay(300);
 
           //We want to show shapes other than circles.
@@ -51,21 +51,39 @@ export class Page2 {
               return chart;
           }
 
+          var kvArray = [{key:1, value:10}, {key:2, value:20}, {key:3, value: 30}];
+          var reformattedArray = kvArray.map(function(obj){
+              var rObj = {};
+              rObj[obj.key] = obj.value;
+              return rObj;
+          });
+
 
           function refreshData()
           {
               let x = 0.5;  // 5 Seconds
 
               for(let gp = 0; gp < myData.length-1; gp++) {
-                  for(let dp = 0; dp < myData[gp].values.length; dp++ ) {
-                      let newX = myData[gp].values[dp].x + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
-                      let newY = myData[gp].values[dp].y + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
+                  myData[gp].values = myData[gp].values.map(function (obj) {
+                      let retObj = obj;
+                      let newX = retObj.x + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
+                      let newY = retObj.y + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
                       let newWeight = Number(Math.sqrt(Math.pow(Math.abs(newX),2) + Math.pow(Math.abs(newY),2))).toFixed(2)
-                      myData[gp].values[dp].x = newX;
-                      myData[gp].values[dp].y = newY;
-                      myData[gp].values[dp].distance = newWeight;
-                      myData[gp].values[dp].size = newWeight;
-                  }
+                      retObj.x = newX;
+                      retObj.y = newY;
+                      retObj.distance = newWeight;
+                      retObj.size = newWeight;
+                      return retObj;
+                  });
+                  // for(let dp = 0; dp < myData[gp].values.length; dp++ ) {
+                  //     let newX = myData[gp].values[dp].x + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
+                  //     let newY = myData[gp].values[dp].y + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
+                  //     let newWeight = Number(Math.sqrt(Math.pow(Math.abs(newX),2) + Math.pow(Math.abs(newY),2))).toFixed(2)
+                  //     myData[gp].values[dp].x = newX;
+                  //     myData[gp].values[dp].y = newY;
+                  //     myData[gp].values[dp].distance = newWeight;
+                  //     myData[gp].values[dp].size = newWeight;
+                  // }
               }
               loadChart();
 
