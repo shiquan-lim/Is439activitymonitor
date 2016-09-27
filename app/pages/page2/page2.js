@@ -58,8 +58,8 @@ export class Page2 {
 
               for(let gp = 0; gp < myData.length-1; gp++) {
                   for(let dp = 0; dp < myData[gp].values.length; dp++ ) {
-                      myData[gp].values[dp].x = myData[gp].values[dp].x + (Math.random() < 0.5 ? -1 : 1)*0.1;
-                      myData[gp].values[dp].y = myData[gp].values[dp].y + (Math.random() < 0.5 ? -1 : 1)*0.1;
+                      myData[gp].values[dp].x = myData[gp].values[dp].x + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
+                      myData[gp].values[dp].y = myData[gp].values[dp].y + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
                   }
               }
               loadChart();
