@@ -36,19 +36,39 @@ export class Page2 {
           //We want to show shapes other than circles.
           // chart.scatter.onlyCircles(false);
 
-          // var myData = randomData(4,10);
-          d3.select('#chart2 svg')
-              .datum(randomData(4,10))
-              .call(chart)
-              .append("line")
-              .attr("x1", 0)
-              .attr("y1", 0)
-              .attr("x2", 0)
-              .attr("y2", 0);
+          var myData = randomData(4,10);
 
-          nv.utils.windowResize(chart.update);
+          nv.addGraph(loadChart);
 
-          return chart;
+          function loadChart() {
+              d3.select('#chart2 svg')
+                  .datum(myData)
+                  .transition().duration(500)
+                  .call(chart);
+
+              nv.utils.windowResize(chart.update);
+
+              return chart;
+          }
+
+
+          function refreshData()
+          {
+              let x = 1;  // 5 Seconds
+
+              for(let gp = 0; gp < myData.length-1; gp++) {
+                  for(let dp = 0; dp < myData[gp].values.length; dp++ ) {
+                      myData[gp].values[dp].x = myData[gp].values[dp].x + (Math.random() < 0.5 ? -1 : 1)*0.1;
+                      myData[gp].values[dp].y = myData[gp].values[dp].y + (Math.random() < 0.5 ? -1 : 1)*0.1;
+                  }
+              }
+              loadChart();
+
+              setTimeout(refreshData, x*1000);
+          }
+
+
+          refreshData();
       });
 
       /**************************************
