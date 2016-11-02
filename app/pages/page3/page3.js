@@ -62,6 +62,11 @@ export class Page3 {
           //         () => console.log('Native layer recieved the request for advertising'),
           //         error => console.error('Native layer failed to begin monitoring: ', error)
           //     );
+
+          // Gideons code
+          this.blabla = function() {
+              console.log("I made it!");
+          };
       } catch (e) {
           console.log('error: ', e);
       }
