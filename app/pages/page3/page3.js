@@ -29,9 +29,17 @@ export class Page3 {
           //         data => console.log('didStartMonitoringForRegion: ', JSON.stringify(data)),
           //         error => console.error()
           //     );
+
+
           delegate.didStartMonitoringForRegion = function (pluginResult) {
               console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
+              this.beaconArr = pluginResult.beacons;
+              console.log('beaconArr' + pluginResult.beacons);
           };
+
+          
+
+
           delegate.didEnterRegion()
               .subscribe(
                   data => {
