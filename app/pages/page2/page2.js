@@ -2,6 +2,7 @@
 import {Component} from '@angular/core';
 import * as d3 from '../../../node_modules/d3/d3';
 import * as nv from '../../../node_modules/nvd3/build/nv.d3';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 
 @Component({
@@ -9,7 +10,11 @@ import * as nv from '../../../node_modules/nvd3/build/nv.d3';
 })
 
 export class Page2 {
-  constructor() {
+    static get parameters() {
+        return [[AngularFire]];
+    }
+
+  constructor(af) {
       nv.addGraph(function() {
           var chart = nv.models.scatterChart()
               // .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.
@@ -33,12 +38,18 @@ export class Page2 {
           chart.margin({"left": 30});
           chart.interactiveUpdateDelay(300);
 
-          //We want to show shapes other than circles.
+          // We want to show shapes other than circles.
           // chart.scatter.onlyCircles(false);
 
           var myData = randomData(2,10);
 
           nv.addGraph(loadChart);
+
+          // setTimeout(generateLatestPing, 5000);
+          //
+          // function generateLatestPing() {
+          //     console.log(myData);
+          // }
 
           function loadChart() {
               d3.select('#chart2 svg')
@@ -61,14 +72,14 @@ export class Page2 {
 
           function refreshData()
           {
-              let x = 0.5;  // 5 Seconds
+              let x = 1;  // 5 Seconds
 
               for(let gp = 0; gp < myData.length-1; gp++) {
                   myData[gp].values = myData[gp].values.map(function (obj) {
                       let retObj = obj;
                       let newX = retObj.x + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
                       let newY = retObj.y + (Math.random() < 0.5 ? -1 : 1)*(Math.random() < 0.5 ? 0.1 : 0.2);
-                      let newWeight = Number(Math.sqrt(Math.pow(Math.abs(newX),2) + Math.pow(Math.abs(newY),2))).toFixed(2)
+                      let newWeight = Number(Math.sqrt(Math.pow(Math.abs(newX),2) + Math.pow(Math.abs(newY),2))).toFixed(2);
                       retObj.x = newX;
                       retObj.y = newY;
                       retObj.distance = newWeight;
@@ -85,6 +96,10 @@ export class Page2 {
                   //     myData[gp].values[dp].size = newWeight;
                   // }
               }
+              // console.log(myData);
+              // this.path = af.database.list('/studentData');
+              // setTimeout(changeWriteStatus, 60000)
+              // if()
               loadChart();
 
               setTimeout(refreshData, x*1000);
@@ -98,9 +113,9 @@ export class Page2 {
        * Simple test data generator
        */
       var users = ["Shi Quan", "Max Chua", "Eslynn Choo", "ShiQi", "Song Rui", "Gideon", "Adam Tan", "Robert Choo", "Alvin Lee", "Sergey Kovalev","Augustine Tan", "Hwee Pink", "Chester Lim", "Amos Tan", "Joseph Lee", "Vinod Aneh", "Cheng Fu", "Zhou Wei", "Margret Thatcher", "Ahmed Azziz","Osama Bin Laden", "George Bush", "Barack Obama", "Hillary Clinton", "Donald Trump", "Joe Biden", "Shinzo Abe", "Lee Hsien Loong", "Xi Jin Ping", "Theresa May","West Brooke", "Mia Khalifa", "Tori Black", "Yan Ru", "Hitler", "Winston Churchill", "Karl Marx", "Mao ZeDong", "Stalin", "Lenin"];
+      
       function randomData(groups, points) { //# groups,# points per group
           var data = [],
-              // shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
               shapes = ['circle'],
               random = d3.random.normal();
 

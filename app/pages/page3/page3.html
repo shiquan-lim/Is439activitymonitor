@@ -10,7 +10,17 @@
   <p>Allow users to toggle settings such as max # of activities to monitor/ to be alerted when a certain threshhold is reached, etc.</p>
     <p>Currently being used to test and track beacons</p>
     <button (click)="blabla()">Submit</button>
-    <!-- {{beaconPlaceholder.ping}}
-    {{beaconPlaceholder.dist}} -->
+    <button (click)="launchBeacons()">Launch Beacons</button>
+    <!--&lt;!&ndash; {{beaconPlaceholder.ping}}-->
+    <!--{{beaconPlaceholder.dist}} &ndash;&gt;-->
     {{printable}}
+  <ion-list inset>
+    <ion-item *ngFor="let beacon of beaconInfo" (click)="itemSelected(item)">
+      <ion-label>
+        Info: {{beacon.uuid}}{{beacon.major}}{{beacon.minor}}
+        Distance: {{beacon.accuracy}}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  {{beaconInfo}}
 </ion-content>

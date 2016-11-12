@@ -1,80 +1,106 @@
 // import {Component} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {IBeacon} from 'ionic-native';
+import { NavController } from 'ionic-angular';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 
 @Component({
   templateUrl: 'build/pages/page3/page3.html'
 })
 export class Page3 {
-  constructor() {
-      try {
-          // Request permission to use location on iOS
-          IBeacon.requestAlwaysAuthorization();
-          // create a new delegate and register it with the native layer
-          let delegate = IBeacon.Delegate();
-          IBeacon.setDelegate(delegate);
 
-          // Subscribe to some of the delegate's event handlers
-          delegate.didRangeBeaconsInRegion()
-              .subscribe(
-                  data => console.log('didRangeBeaconsInRegion: ', JSON.stringify(data)),
-                  error => console.error()
-              );
+    // message: FirebaseListObservable<any>;
+    static get parameters() {
+        return [[AngularFire]];
+    }
 
-          // delegate.didStartMonitoringForRegion()
-          //     .subscribe(
-          //         data => console.log('didStartMonitoringForRegion: ', JSON.stringify(data)),
-          //         error => console.error()
-          //     );
+    constructor(af) {
+      // public af: AngularFire
+      this.message = af.database.list('/items');
+    }
 
-          delegate.didStartMonitoringForRegion = function (pluginResult) {
-              console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
-          };
+    launchBeacons() {
+        try {
+            // Request permission to use location on iOS
+            IBeacon.requestAlwaysAuthorization();
+            // create a new delegate and register it with the native layer
+            let delegate = IBeacon.Delegate();
+            IBeacon.setDelegate(delegate);
 
-          delegate.didEnterRegion()
-              .subscribe(
-                  data => {
-                      console.log('didEnterRegion: ', JSON.stringify(data));
-                  }
-              );
+            this.beaconInfo = {};
+            this.beaconInfo.beacons = [
+                {
+                    uuid: "uxbienwlkx",
+                    major: 2,
+                    minor: 2,
+                    accuracy: 1.5
+                },
+                {
+                    uuid: "uxbienwlkx",
+                    major: 1,
+                    minor: 1,
+                    accuracy: 1.5
+                }
+            ];
 
-          IBeacon.setDelegate(delegate);
+            delegate.didRangeBeaconsInRegion()
+                .subscribe(function (pluginResult) {
+                    console.log('didRangeBeaconsInRegion: ', JSON.stringify(pluginResult.beacons));
+                    // this.beaconInfo.beacons = pluginResult.beacons;
+                    for(var i = 0; i < pluginResult.beacons.length; i++) {
+                        this.beaconInfo.beacons[i] = pluginResult.beacons[i];
+                    }
+                    console.log(this.beaconInfo);
+                });
 
-          // lightBlue UUID
-          // this.beaconRegion = IBeacon.BeaconRegion('SKYBEACON1','B5FF04D7-5F8C-42AF-B670-2767AFA95B0D');
-          // skybeacon UUID
-          this.beaconRegion = IBeacon.BeaconRegion('SKYBEACON','fda50693-a4e2-4fb1-afcf-c6eb07647825');
-          this.printable = JSON.stringify(this.beaconRegion);
+            delegate.didStartMonitoringForRegion = function (pluginResult) {
+                console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
+            };
 
-          IBeacon.startMonitoringForRegion(this.beaconRegion)
-              .then(
-                  () => console.log('Native layer recieved the request to monitoring', JSON.stringify(this.beaconRegion)),
-                  error => console.error('Native layer failed to begin monitoring: ', error)
-              );
-          IBeacon.startRangingBeaconsInRegion(this.beaconRegion)
-              .then(
-                  () => console.log('Native layer recieved the request for ranging', JSON.stringify(this.beaconRegion)),
-                  error => console.error('Native layer failed to begin monitoring: ', error)
-              );
+            // delegate.didEnterRegion = function()
+            //     .subscribe(
+            //         data => {
+            //             console.log('didEnterRegion: ', JSON.stringify(data));
+            //         }
+            //     );
 
-          IBeacon.startMonitoringForRegion(this.beaconRegion)
-              .then(
-                  () => console.log('Native layer recieved the request to monitoring', JSON.stringify(this.beaconRegion)),
-                  error => console.error('Native layer failed to begin monitoring: ', error)
-              );
-          // IBeacon.startAdvertising(this.beaconRegion)
-          //     .then(
-          //         () => console.log('Native layer recieved the request for advertising'),
-          //         error => console.error('Native layer failed to begin monitoring: ', error)
-          //     );
+            IBeacon.setDelegate(delegate);
 
-      } catch (e) {
-          console.log('error: ', e);
-      }
-      // Gideons code
-      this.blabla = function() {
-          console.log("I made it!");
-      };
-  }
+            // skybeacon UUID
+            this.beaconRegion = IBeacon.BeaconRegion('SKYBEACON','fda50693-a4e2-4fb1-afcf-c6eb07647825');
+            this.printable = JSON.stringify(this.beaconRegion);
+
+            IBeacon.startMonitoringForRegion(this.beaconRegion)
+                .then(
+                    () => console.log('Native layer recieved the request to monitoring', JSON.stringify(this.beaconRegion)),
+                error => console.error('Native layer failed to begin monitoring: ', error)
+                );
+            IBeacon.startRangingBeaconsInRegion(this.beaconRegion)
+                .then(
+                    () => console.log('Native layer recieved the request for ranging', JSON.stringify(this.beaconRegion)),
+                error => console.error('Native layer failed to begin monitoring: ', error)
+                );
+
+            IBeacon.startMonitoringForRegion(this.beaconRegion)
+                .then(
+                    () => console.log('Native layer recieved the request to monitoring', JSON.stringify(this.beaconRegion)),
+                error => console.error('Native layer failed to begin monitoring: ', error)
+                );
+
+        } catch (e) {
+            console.log('error: ', e);
+        }
+    }
+
+    blabla() {
+        this.message.push({
+            "Message": "Connection test"
+        }).then( newBill => {
+            console.log("message written to DB");
+        }, error => {
+            console.log(error);
+        });
+        // console.log("okaayy");
+    }
 }
