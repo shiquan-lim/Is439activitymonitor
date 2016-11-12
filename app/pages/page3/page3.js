@@ -28,8 +28,8 @@ export class Page3 {
             let delegate = IBeacon.Delegate();
             IBeacon.setDelegate(delegate);
 
-            this.beaconInfo = {};
-            this.beaconInfo.beacons = [
+            // this.beaconInfo = {};
+            this.beaconInfo = [
                 {
                     uuid: "uxbienwlkx",
                     major: 2,
@@ -47,10 +47,10 @@ export class Page3 {
             delegate.didRangeBeaconsInRegion()
                 .subscribe(function (pluginResult) {
                     console.log('didRangeBeaconsInRegion: ', JSON.stringify(pluginResult.beacons));
-                    // this.beaconInfo.beacons = pluginResult.beacons;
-                    for(var i = 0; i < pluginResult.beacons.length; i++) {
-                        this.beaconInfo.beacons[i] = pluginResult.beacons[i];
-                    }
+                    this.beaconInfo = pluginResult.beacons;
+                    // for(var i = 0; i < pluginResult.beacons.length; i++) {
+                    //     this.beaconInfo.beacons[i] = pluginResult.beacons[i];
+                    // }
                     console.log(this.beaconInfo);
                 });
 
