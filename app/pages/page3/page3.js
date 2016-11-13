@@ -9,7 +9,6 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
   templateUrl: 'build/pages/page3/page3.html'
 })
 export class Page3 {
-
     // message: FirebaseListObservable<any>;
     static get parameters() {
         return [[AngularFire]];
@@ -29,29 +28,18 @@ export class Page3 {
             IBeacon.setDelegate(delegate);
 
             // this.beaconInfo = {};
-            this.beaconInfo = [
-                {
-                    uuid: "uxbienwlkx",
-                    major: 2,
-                    minor: 2,
-                    accuracy: 1.5
-                },
-                {
-                    uuid: "uxbienwlkx",
-                    major: 1,
-                    minor: 1,
-                    accuracy: 1.5
-                }
-            ];
+            var self = this;
+            this.beaconInfo = [];
 
             delegate.didRangeBeaconsInRegion()
                 .subscribe(function (pluginResult) {
-                    console.log('didRangeBeaconsInRegion: ', JSON.stringify(pluginResult.beacons));
-                    this.beaconInfo = pluginResult.beacons;
+                    // console.log(self.beaconInfo);
+                    // console.log('didRangeBeaconsInRegion: ', pluginResult.beacons);
+                    self.beaconInfo = pluginResult.beacons;
                     // for(var i = 0; i < pluginResult.beacons.length; i++) {
                     //     this.beaconInfo.beacons[i] = pluginResult.beacons[i];
                     // }
-                    console.log(this.beaconInfo);
+                    // console.log('Current beaconInfo: ', self.beaconInfo);
                 });
 
             delegate.didStartMonitoringForRegion = function (pluginResult) {
@@ -102,5 +90,10 @@ export class Page3 {
             console.log(error);
         });
         // console.log("okaayy");
+    }
+
+    registerBeacon(uuid) {
+        console.log(uuid);
+        console.log(this.registration);
     }
 }
