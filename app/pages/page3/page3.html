@@ -1,3 +1,8 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Activity Monitor</ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-navbar *navbar>
   <ion-title>
@@ -6,13 +11,32 @@
 </ion-navbar>
 
 <ion-content padding class="page3">
-  <h2>SETTINGS PLACEHOLDER</h2>
-  <p>Allow users to toggle settings such as max # of activities to monitor/ to be alerted when a certain threshhold is reached, etc.</p>
-    <p>Currently being used to test and track beacons</p>
-    <button (click)="blabla()">Submit</button>
-    <button (click)="launchBeacons()">Launch Beacons</button>
-    <!--&lt;!&ndash; {{beaconPlaceholder.ping}}-->
-    <!--{{beaconPlaceholder.dist}} &ndash;&gt;-->
+  <ion-card>
+    <ion-card-header>
+      Delegate Beacons
+    </ion-card-header>
+    <p>Launch Beacons to find available hardware</p>
+    <p>Cut beacons before assigning them</p>
+    <p>Tap on the beacon info to assign a name to the device</p>
+  </ion-card>
+    <!--<button *ngIf="!isRanging" (click)="launchBeacons()">Launch Beacons</button>-->
+    <!--<button *ngIf="isRanging" (click)="cutBeacons()">Cut Beacons</button>-->
+  <ion-list>
+    <ion-item *ngIf="!isRanging">
+      Currently inactive
+      <button ion-button outline item-right icon-left (click)="launchBeacons()">
+        <ion-icon name="star"></ion-icon>
+        Start Ranging
+      </button>
+    </ion-item>
+    <ion-item *ngIf="isRanging" (click)="cutBeacons()">
+      Currently active
+      <button ion-button outline item-right icon-left>
+        <ion-icon name="star"></ion-icon>
+        Stop Ranging
+      </button>
+    </ion-item>
+  </ion-list>
   <ion-list inset>
     <ion-item *ngFor="let beacon of beaconInfo">
       <ion-label floating>
@@ -20,9 +44,12 @@
         <p>Major: {{beacon.major}} Minor: {{beacon.minor}}</p>
         <p *ngIf="beacon.accuracy < 0 || beacon.proximity == 'ProximityUnknown'">Beacon out of range</p>
       </ion-label>
-      <ion-input type="text"></ion-input>
-      <button ion-button outline item-right icon-left (click)="registerBeacon(beacon.uuid)">
-        <ion-icon name="bookmark"></ion-icon>
+      <ion-input type="text" [(ngModel)]='registration[beacon.uuid + beacon.major + beacon.minor]'></ion-input>
+      <button *ngIf="registration[beacon.uuid + beacon.major + beacon.minor]" ion-button outline item-right icon-left (click)="removeAssociation(beacon.uuid + beacon.major + beacon.minor)">
+        <ion-icon name="md-remove-circle"></ion-icon>
+      </button>
+      <button ion-button outline item-right icon-left (click)="registerBeacon(beacon.uuid + beacon.major + beacon.minor)">
+        <ion-icon [name]='(registration[beacon.uuid + beacon.major + beacon.minor] ? "ios-bookmark" : "ios-bookmark-outline")'></ion-icon>
       </button>
     </ion-item>
   </ion-list>

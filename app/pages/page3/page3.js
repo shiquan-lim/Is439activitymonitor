@@ -15,11 +15,16 @@ export class Page3 {
     }
 
     constructor(af) {
-      // public af: AngularFire
-      this.message = af.database.list('/items');
+      this.pingPath = af.database.list('/childData');
+      this.isRanging = false;
+        this.registrationPath = af.database.object('/registration');
+        this.registrationPath.subscribe((data) => {
+            this.registration = data
+        });
     }
 
     launchBeacons() {
+        this.isRanging = true;
         try {
             // Request permission to use location on iOS
             IBeacon.requestAlwaysAuthorization();
@@ -30,6 +35,31 @@ export class Page3 {
             // this.beaconInfo = {};
             var self = this;
             this.beaconInfo = [];
+            this.beaconRegistration = {
+                "fda50693-a4e2-4fb1-afcf-c6eb0764782511": "Max Chua",
+                "fda50693-a4e2-4fb1-afcf-c6eb0764782522": "Gideon Raj"
+            };
+
+            // setTimeout(writeBeacons, 2000);
+            
+            function writeBeacons() {
+                for(let bIndex in self.beaconInfo) {
+                    // console.log(JSON.stringify(self.beaconInfo[beacon]));
+                    let beacon = self.beaconInfo[bIndex];
+                    self.pingPath.push(
+                        {
+                            uuid: beacon.uuid,
+                            major: beacon.major,
+                            minor: beacon.minor,
+                            timestamp: Date.now(),
+                            proximity: beacon.accuracy,
+                            isMonitoring: beacon.accuracy >= 0,
+                            associatedChild: self.beaconRegistration[beacon.uuid.toLowerCase() + beacon.major + beacon.minor]
+                        }
+                    )
+                }
+                setTimeout(writeBeacons, 60000);
+            }
 
             delegate.didRangeBeaconsInRegion()
                 .subscribe(function (pluginResult) {
@@ -57,23 +87,16 @@ export class Page3 {
 
             // skybeacon UUID
             this.beaconRegion = IBeacon.BeaconRegion('SKYBEACON','fda50693-a4e2-4fb1-afcf-c6eb07647825');
-            this.printable = JSON.stringify(this.beaconRegion);
 
             IBeacon.startMonitoringForRegion(this.beaconRegion)
                 .then(
                     () => console.log('Native layer recieved the request to monitoring', JSON.stringify(this.beaconRegion)),
-                error => console.error('Native layer failed to begin monitoring: ', error)
+                    error => console.error('Native layer failed to begin monitoring: ', error)
                 );
             IBeacon.startRangingBeaconsInRegion(this.beaconRegion)
                 .then(
                     () => console.log('Native layer recieved the request for ranging', JSON.stringify(this.beaconRegion)),
-                error => console.error('Native layer failed to begin monitoring: ', error)
-                );
-
-            IBeacon.startMonitoringForRegion(this.beaconRegion)
-                .then(
-                    () => console.log('Native layer recieved the request to monitoring', JSON.stringify(this.beaconRegion)),
-                error => console.error('Native layer failed to begin monitoring: ', error)
+                    error => console.error('Native layer failed to begin monitoring: ', error)
                 );
 
         } catch (e) {
@@ -81,19 +104,45 @@ export class Page3 {
         }
     }
 
+    cutBeacons() {
+        this.isRanging = false;
+        // this.beaconInfo = [];
+        try {
+            // IBeacon.stopMonitoringForRegion(this.beaconRegion)
+            //     .then(function () {
+            //         console.log(this.beaconRegion);
+            //        I
+            //     });
+            IBeacon.stopRangingBeaconsInRegion(this.beaconRegion)
+                .then(function () {
+                    console.log(this.beaconRegion);
+                });
+        } catch (e) {
+            console.log('error', e);
+        }
+    }
+
     blabla() {
         this.message.push({
-            "Message": "Connection test"
+            message: "Connection test"
         }).then( newBill => {
             console.log("message written to DB");
         }, error => {
             console.log(error);
         });
-        // console.log("okaayy");
     }
 
     registerBeacon(uuid) {
         console.log(uuid);
         console.log(this.registration);
+        var retObj = {}
+        retObj[uuid] = this.registration[uuid];
+        this.registrationPath.update(retObj);
+    }
+
+    removeAssociation(uuid) {
+        var retObj = {}
+        retObj[uuid] = null;
+        this.registrationPath.update(retObj);
     }
 }
