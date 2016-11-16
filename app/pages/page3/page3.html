@@ -45,11 +45,11 @@
         <p *ngIf="beacon.accuracy < 0 || beacon.proximity == 'ProximityUnknown'">Beacon out of range</p>
       </ion-label>
       <ion-input type="text" [(ngModel)]='registration[beacon.uuid + beacon.major + beacon.minor]'></ion-input>
-      <button *ngIf="registration[beacon.uuid + beacon.major + beacon.minor]" ion-button outline item-right icon-left (click)="removeAssociation(beacon.uuid + beacon.major + beacon.minor)">
+      <button *ngIf="dbRegistered[beacon.uuid + beacon.major + beacon.minor]" ion-button outline item-right icon-left (click)="removeAssociation(beacon.uuid + beacon.major + beacon.minor)">
         <ion-icon name="md-remove-circle"></ion-icon>
       </button>
       <button ion-button outline item-right icon-left (click)="registerBeacon(beacon.uuid + beacon.major + beacon.minor)">
-        <ion-icon [name]='(registration[beacon.uuid + beacon.major + beacon.minor] ? "ios-bookmark" : "ios-bookmark-outline")'></ion-icon>
+        <ion-icon [name]='(dbRegistered[beacon.uuid + beacon.major + beacon.minor] ? "ios-bookmark" : "ios-bookmark-outline")'></ion-icon>
       </button>
     </ion-item>
   </ion-list>

@@ -1,8 +1,9 @@
 // import {Component} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {IBeacon} from 'ionic-native';
-import { NavController } from 'ionic-angular';
+import { NavController, Events, ToastController } from 'ionic-angular';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
+
 
 
 @Component({
@@ -11,16 +12,21 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 export class Page3 {
     // message: FirebaseListObservable<any>;
     static get parameters() {
-        return [[AngularFire]];
+        return [[AngularFire], [Events], [ToastController]];
     }
 
-    constructor(af) {
+    constructor(af, events, toastCtrl) {
       this.pingPath = af.database.list('/childData');
       this.isRanging = false;
         this.registrationPath = af.database.object('/registration');
         this.registrationPath.subscribe((data) => {
-            this.registration = data
+            this.registration = data;
         });
+        this.registrationPath.subscribe((data) => {
+            this.dbRegistered = data;
+        });
+        this.event = events;
+        this.toastCtrl = toastCtrl;
     }
 
     launchBeacons() {
@@ -66,6 +72,7 @@ export class Page3 {
                     // console.log(self.beaconInfo);
                     // console.log('didRangeBeaconsInRegion: ', pluginResult.beacons);
                     self.beaconInfo = pluginResult.beacons;
+                    self.event.publish('beacons:ranged', self.beaconInfo);
                     // for(var i = 0; i < pluginResult.beacons.length; i++) {
                     //     this.beaconInfo.beacons[i] = pluginResult.beacons[i];
                     // }
@@ -133,16 +140,26 @@ export class Page3 {
     }
 
     registerBeacon(uuid) {
-        console.log(uuid);
-        console.log(this.registration);
+        // console.log(this.registration);
+        // console.log(this.dbRegistered);
         var retObj = {}
         retObj[uuid] = this.registration[uuid];
         this.registrationPath.update(retObj);
+        let toast = this.toastCtrl.create({
+            message: 'Beacon successfully registered',
+            duration: 1000
+        });
+        toast.present();
     }
 
     removeAssociation(uuid) {
         var retObj = {}
         retObj[uuid] = null;
         this.registrationPath.update(retObj);
+        let toast = this.toastCtrl.create({
+            message: 'Beacon successfully de-registered',
+            duration: 1000
+        });
+        toast.present();
     }
 }
