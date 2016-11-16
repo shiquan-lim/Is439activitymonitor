@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Activity Monitor</ion-title>
+    <ion-title>KiDar</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -26,13 +26,24 @@
         <svg></svg>
     </div>
 
-  <ion-list>
-    <ion-list-header>
-      DANGER ZONE
-    </ion-list-header>
-    <ion-item *ngFor="let child of data | orderBeacons">
-      <h3>{{registration[child.uuid + child.major + child.minor]}}</h3>
-      <p>{{child.accuracy}}m away</p>
-    </ion-item>
-  </ion-list>
+  <ion-scroll scrollY="true" [ngStyle]="{'height': '300px'}">
+    <ion-list>
+      <ion-list-header>
+        Danger Index
+      </ion-list-header>
+      <ion-item *ngFor="let child of data | orderBeacons">
+        <ion-avatar item-left>
+          <ion-icon *ngIf="child.accuracy <= 5 && child.accuracy >= 0" name="leaf" [ngStyle]="{'color':'green', 'size': 64}" item-left></ion-icon>
+          <ion-icon *ngIf="child.accuracy > 5 && child.accuracy <= 7" name="leaf" [ngStyle]="{'color':'orange', 'size': 64}" item-left></ion-icon>
+          <ion-icon *ngIf="child.accuracy >= 7 || child.accuracy < 0 || child.proximity == 'ProximityUnknown'" name="leaf" [ngStyle]="{'color':'red', 'size': 64}" item-left></ion-icon>
+        </ion-avatar>
+        <h3>{{registration[child.uuid + child.major + child.minor]}}</h3>
+        <p>{{child.accuracy}}m away</p>
+        <ion-buttons item-right>
+          <div *ngIf="child.accuracy > 5 && child.accuracy <= 7">Watch out!</div>
+          <div *ngIf="child.accuracy >= 7 || child.accuracy < 0 || child.proximity == 'ProximityUnknown'">Missing!</div>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+  </ion-scroll>
 </ion-content>

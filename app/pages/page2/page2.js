@@ -31,6 +31,21 @@ export class Page2 {
             // console.log(this.data);
       });
 
+      // events.subscribe('beacons:ranged', (beaconData) => {
+      //     this.readData = beaconData[0];
+      // }).then(function() {
+      //     this.regHolder = self.registration;
+      //     for(let entry in self.readData) {
+      //         let ki = entry.uuid + entry.major + entry.minor;
+      //         if(this.regHolder[ki]) {
+      //             this.regHolder.remove(ki);
+      //         }
+      //     }
+      //     for(let user in regHolder) {
+      //         console.log(JSON.stringify(user));
+      //     }
+      // });
+
       nv.addGraph(function() {
           var chart = nv.models.scatterChart()
           // .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.

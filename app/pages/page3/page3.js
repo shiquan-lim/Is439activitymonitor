@@ -153,7 +153,7 @@ export class Page3 {
     }
 
     removeAssociation(uuid) {
-        var retObj = {}
+        var retObj = {};
         retObj[uuid] = null;
         this.registrationPath.update(retObj);
         let toast = this.toastCtrl.create({
