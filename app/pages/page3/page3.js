@@ -53,11 +53,11 @@ export class Page3 {
                             timestamp: Date.now(),
                             proximity: beacon.accuracy / 2,
                             isMonitoring: beacon.accuracy >= 0,
-                            associatedChild: self.registration[beacon.uuid.toLowerCase() + beacon.major + beacon.minor]
+                            associatedChild: self.registration[beacon.uuid + beacon.major + beacon.minor]
                         }
                     )
                 }
-                setTimeout(writeBeacons, 60000);
+                setTimeout(writeBeacons, 30000);
             }
 
             delegate.didRangeBeaconsInRegion()

@@ -11,21 +11,50 @@
 <ion-content padding class="page1">
     <link rel=”stylesheet” href="../../../node_modules/nvd3/build/nv.d3.css">
   <p>
-    Show an aggregation of student distances from the nuclei over time for a single
+    Generate a report for a specific time frame
   </p>
     <style>
 
         #chart svg {
-            height: 400px;
+          height: 400px;
+          width: 100%;
+          margin: 0px;
+          padding: 0px;
         }
 
     </style>
-    <div id="chart">
-        <svg></svg>
-    </div>
-    <!--<ion-list>-->
-        <!--<ion-item *ngFor="let item of items">-->
-            <!--{{ item }}-->
-        <!--</ion-item>-->
-    <!--</ion-list>-->
+  <ion-item>
+    <ion-label>Start Date</ion-label>
+    <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="startDate"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>End Date</ion-label>
+    <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="endDate"></ion-datetime>
+  </ion-item>
+  <button ion-button (click)="loadData()" [disabled]="!startDate || !endDate" block>Load Data</button>
+
+  <ion-card *ngIf="showReport">
+    <ion-card-header>
+      Data for {{startDate | date}} to {{endDate | date}}
+    </ion-card-header>
+
+    <ion-list>
+      <ion-item>
+        <ion-icon name="ios-eye" item-left></ion-icon>
+        {{crunchiesCount}} Monitored Instances
+      </ion-item>
+      <ion-item>
+        <ion-icon name="ios-flag" item-left></ion-icon>
+        {{flaggedCount}} Alarm Instances ({{flaggedPercentage}}%)
+      </ion-item>
+      <ion-item>
+        <ion-icon name="ios-paper-plane" item-left></ion-icon>
+        Most Active: {{mostToublesome}} ({{troubleMakers[mostToublesome]}} times)
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <!--<div id="chart">-->
+    <!--<svg></svg>-->
+  <!--</div>-->
 </ion-content>

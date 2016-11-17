@@ -79,7 +79,7 @@ export class Page2 {
               }]
           };
           myData[2] = {
-              key: 'Warning 1',
+              key: 'Warning Zone 1',
               values: [{
                   x: 6
                   , y: 6
@@ -90,7 +90,7 @@ export class Page2 {
               }]
           };
           myData[3] = {
-              key: 'Warning 2',
+              key: 'Warning Zone 2',
               values: [{
                   x: 7
                   , y: 7
@@ -110,7 +110,7 @@ export class Page2 {
                       , y: bI.accuracy
                       , size: bI.accuracy //Configure the size of each scatter point
                       , shape: "circle"  //Configure the shape of each scatter point.
-                      , name: "NUCLEUS"
+                      , name: self.registration[bI.uuid + bI.major + bI.minor]
                       , distance: bI.accuracy
                   }
               })
@@ -158,7 +158,7 @@ export class Page2 {
                           , y: bI.accuracy
                           , size: bI.accuracy //Configure the size of each scatter point
                           , shape: "circle"  //Configure the shape of each scatter point.
-                          , name: "NUCLEUS"
+                          , name: self.registration[bI.uuid + bI.major + bI.minor]
                           , distance: bI.accuracy
                       }
                   })
