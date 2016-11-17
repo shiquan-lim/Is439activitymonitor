@@ -27,24 +27,19 @@ export class Page2 {
 
       events.subscribe('beacons:ranged', (beaconData) => {
           // [[{"minor":2,"rssi":0,"major":2,"proximity":"ProximityUnknown","accuracy":-1,"uuid":"FDA50693-A4E2-4FB1-AFCF-C6EB07647825"},{"minor":1,"rssi":-45,"major":1,"proximity":"ProximityNear","accuracy":0.37,"uuid":"FDA50693-A4E2-4FB1-AFCF-C6EB07647825"}]]
-          this.data = beaconData[0];
-            // console.log(this.data);
+          this.data = beaconData[0].filter(function (entry) {
+                return self.registration[entry.uuid + entry.major + entry.minor];
+            }).map(function (entry) {
+                return {
+                    'minor': entry.minor,
+                    'rssi': entry.rssi,
+                    'major': entry.major,
+                    'proximity': entry.proximity,
+                    'accuracy': entry.accuracy / 2,
+                    'uuid': entry.uuid
+                }
+            });
       });
-
-      // events.subscribe('beacons:ranged', (beaconData) => {
-      //     this.readData = beaconData[0];
-      // }).then(function() {
-      //     this.regHolder = self.registration;
-      //     for(let entry in self.readData) {
-      //         let ki = entry.uuid + entry.major + entry.minor;
-      //         if(this.regHolder[ki]) {
-      //             this.regHolder.remove(ki);
-      //         }
-      //     }
-      //     for(let user in regHolder) {
-      //         console.log(JSON.stringify(user));
-      //     }
-      // });
 
       nv.addGraph(function() {
           var chart = nv.models.scatterChart()
@@ -64,15 +59,9 @@ export class Page2 {
           //Axis settings
           chart.xAxis.tickFormat(d3.format('.01f'));
           chart.yAxis.tickFormat(d3.format('.01f'));
-          // chart.yAxis.tickValues(0);
-          // chart.xAxis.tickValues(0);
           chart.margin({"left": 30});
           chart.interactiveUpdateDelay(300);
 
-          // We want to show shapes other than circles.
-          // chart.scatter.onlyCircles(false);
-
-          // var myData = randomData(2,10);
           var myData = [];
           myData[0] = {
               'key': 'Students',
@@ -129,12 +118,6 @@ export class Page2 {
 
           nv.addGraph(loadChart);
 
-          // setTimeout(generateLatestPing, 5000);
-          //
-          // function generateLatestPing() {
-          //     console.log(myData);
-          // }
-
           function loadChart() {
               d3.select('#chart2 svg')
                   .datum(myData)
@@ -145,14 +128,6 @@ export class Page2 {
 
               return chart;
           }
-
-          // var kvArray = [{key: 1, value: 10}, {key: 2, value: 20}, {key: 3, value: 30}];
-          // var reformattedArray = kvArray.map(function (obj) {
-          //     var rObj = {};
-          //     rObj[obj.key] = obj.value;
-          //     return rObj;
-          // });
-
 
           function refreshData() {
               let x = 1;  // x Seconds
@@ -201,11 +176,6 @@ export class Page2 {
 
               setTimeout(refreshData, x * 1000);
           }
-
-          // console.log(myData);
-          // this.path = af.database.list('/studentData');
-          // setTimeout(changeWriteStatus, 60000)
-          // if()
 
           refreshData();
       });
